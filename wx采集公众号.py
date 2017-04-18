@@ -50,88 +50,88 @@ sg_urls = [ 'http://weixin.sogou.com/weixin?type=1&s_from=input&query=%s' %x for
 #获取代理
 proxypool = json.loads(requests.get('http://127.0.0.1:8000/?count=30').text)
 def chooseproxy():
-	print('---获取代理')
-	proxy = random.choice(proxypool)
-	proxies = {'http':'http://%s:%s' %(proxy[0],proxy[1])}
-	try:
-		print('---验证代理')
-		r = requests.get('http://www.ip.cn',proxies=proxies)
-	except:
-		chooseproxy()
-	else:
-		print('----代理有效')
-		return proxies
+    print('---获取代理')
+    proxy = random.choice(proxypool)
+    proxies = {'http':'http://%s:%s' %(proxy[0],proxy[1])}
+    try:
+        print('---验证代理')
+        r = requests.get('http://www.ip.cn',proxies=proxies)
+    except:
+        chooseproxy()
+    else:
+        print('----代理有效')
+        return proxies
 
 
 indexurls = []
 
 
 for i in sg_urls:
-	headers = {
+    headers = {
    'User-Agent': random.choice(USER_AGENTS),
    'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
    'Accept-Language': 'en-US,en;q=0.5',
    'Connection': 'keep-alive',
    'Accept-Encoding': 'gzip, deflate',
-	}
-	print('---请求搜狗微信搜索页')
-	r = requests.get(i,headers=headers,timeout=5,allow_redirects=True)
-	s = BeautifulSoup(r.text,'html.parser')
-	try:
-		url = s.find('a',uigs='account_name_0')['href']
-	except:
-		print(s.find('title').getText())
-	else:
-		print(url)
-		with open('公众号列表页.txt','a+') as g:
-			g.write('%s\n' %url)
-		indexurls.append(url)
-	finally:
-		time.sleep(2)
+    }
+    print('---请求搜狗微信搜索页')
+    r = requests.get(i,headers=headers,timeout=5,allow_redirects=True)
+    s = BeautifulSoup(r.text,'html.parser')
+    try:
+        url = s.find('a',uigs='account_name_0')['href']
+    except:
+        print(s.find('title').getText())
+    else:
+        print(url)
+        with open('公众号列表页.txt','a+') as g:
+            g.write('%s\n' %url)
+        indexurls.append(url)
+    finally:
+        time.sleep(2)
 
 arturls = []
 
 print('---请求公众号列表页')
 for u in indexurls:
-	headers = {
+    headers = {
     'User-Agent': random.choice(USER_AGENTS),
     'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
     'Accept-Language': 'en-US,en;q=0.5',
     'Connection': 'keep-alive',
     'Accept-Encoding': 'gzip, deflate'
-	}
-	r = requests.get(u,headers=headers,timeout=5,allow_redirects=True)
-	for d in r.text.split('","'):
-		if 'content_url' in d:
-			url = re.sub('content_url":"','http://mp.weixin.qq.com',d)
-			url = re.sub('amp;','',url)
-			with open('微信文章页.txt','a+') as a:
-				a.write('%s\n' %url)
-			arturls.append(url)
-		else:
-			print('----获取文章页URL失败')
-			continue
-	time.sleep(2)
+    }
+    r = requests.get(u,headers=headers,timeout=5,allow_redirects=True)
+    for d in r.text.split('","'):
+        if 'content_url' in d:
+            url = re.sub('content_url":"','http://mp.weixin.qq.com',d)
+            url = re.sub('amp;','',url)
+            with open('微信文章页.txt','a+') as a:
+                a.write('%s\n' %url)
+            arturls.append(url)
+        else:
+            print('----获取文章页URL失败')
+            continue
+    time.sleep(2)
 
-brw = webdriver.PhantomJS()			
+brw = webdriver.PhantomJS()            
 
 print('---请求文章页')
 for a in arturls:
-	brw.delete_all_cookies()
-	brw.get(a)
-	time.sleep(4)
-	s = BeautifulSoup(brw.page_source,'html.parser')
-	try:
-		title = s.find('h2').getText().strip()
-		readnum = s.find('span',id='sg_readNum3').getText()
-		likenum = s.find('span','praise_num',id='sg_likeNum3').getText()
-		poster = s.find('a',id='post-user').getText()
-	except:
-		continue
-	else:
-		print('%s\t%s\t%s\t%s' %(poster,title,readnum,likenum))
-		with open('wx.txt','a+') as f:
-			f.write('%s\t%s\t%s\t%s\n' %(poster,title,readnum,likenum))
+    brw.delete_all_cookies()
+    brw.get(a)
+    time.sleep(4)
+    s = BeautifulSoup(brw.page_source,'html.parser')
+    try:
+        title = s.find('h2').getText().strip()
+        readnum = s.find('span',id='sg_readNum3').getText()
+        likenum = s.find('span','praise_num',id='sg_likeNum3').getText()
+        poster = s.find('a',id='post-user').getText()
+    except:
+        continue
+    else:
+        print('%s\t%s\t%s\t%s' %(poster,title,readnum,likenum))
+        with open('wx.txt','a+') as f:
+            f.write('%s\t%s\t%s\t%s\n' %(poster,title,readnum,likenum))
 
 brw.close()
 brw.quit()

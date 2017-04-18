@@ -14,33 +14,33 @@ ddc = open('颠倒词.txt','w')
 lock = threading.Lock()
 
 def ifddc(A):
-	for B in open('xgt_words副本.txt','r'):
-		if sorted(A) == sorted(B) and A != B:
-			lock.acquire()
-			try:
-				textbak.pop(textbak.index(B))
-				ddc.write(B)
-			except:
-				continue
-			finally:
-				lock.release()
+    for B in open('xgt_words副本.txt','r'):
+        if sorted(A) == sorted(B) and A != B:
+            lock.acquire()
+            try:
+                textbak.pop(textbak.index(B))
+                ddc.write(B)
+            except:
+                continue
+            finally:
+                lock.release()
 
 
 while text:
-	lines = text[:10]
-	text = text[10:]
-	threads = []
-	for keyword in lines:
-		t = threading.Thread(target=ifddc,args=(keyword,))
-		threads.append(t)
-		t.start()
-	
-	for t in threads:
-		t.join()
+    lines = text[:10]
+    text = text[10:]
+    threads = []
+    for keyword in lines:
+        t = threading.Thread(target=ifddc,args=(keyword,))
+        threads.append(t)
+        t.start()
+    
+    for t in threads:
+        t.join()
 
 
 for i in textbak:
-	file.write(i)
+    file.write(i)
 print('颠倒词判断完毕,结果已写入文件')
 file.close()
 ddc.close()

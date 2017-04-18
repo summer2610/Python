@@ -14,34 +14,34 @@ import jieba.analyse
 import jieba,argparse
 
 def cut_for_search(content):
-	return jieba.cut_for_search(content)
+    return jieba.cut_for_search(content)
 
 def cut(content):
-	return jieba.cut(content)
+    return jieba.cut(content)
 
 def extract_tags(content,topK):
-	return jieba.analyse.extract_tags(content,topK=topK)
+    return jieba.analyse.extract_tags(content,topK=topK)
 
 def cipin(content,mode,top):
-	if mode == "s":
-		tags = cut_for_search(content)
-	elif mode == "c":
-		tags = cut(content)
-	else:
-		raise ValueError("参数错误:mode应该为s(搜索引擎模式分词)或c(精确模式分词)")
-	ci_dict = {}
-	for i in tags:
-		i = i.strip()
-		if i not in ci_dict.keys():
-			ci_dict[i] = 1
-		else:
-			ci_dict[i] += 1
-	core_ci = extract_tags(content,top)
-	unsortdict = {}
-	for i in core_ci:
-		unsortdict[i] = ci_dict[i]
-	for i in sorted(unsortdict.items(),key=lambda item:item[1],reverse=True):
-		print('%s\t%d' %(i[0],i[1]))
+    if mode == "s":
+        tags = cut_for_search(content)
+    elif mode == "c":
+        tags = cut(content)
+    else:
+        raise ValueError("参数错误:mode应该为s(搜索引擎模式分词)或c(精确模式分词)")
+    ci_dict = {}
+    for i in tags:
+        i = i.strip()
+        if i not in ci_dict.keys():
+            ci_dict[i] = 1
+        else:
+            ci_dict[i] += 1
+    core_ci = extract_tags(content,top)
+    unsortdict = {}
+    for i in core_ci:
+        unsortdict[i] = ci_dict[i]
+    for i in sorted(unsortdict.items(),key=lambda item:item[1],reverse=True):
+        print('%s\t%d' %(i[0],i[1]))
 
 
 parser = argparse.ArgumentParser()
@@ -57,5 +57,5 @@ TOP = args.topK
 MODE = args.mode
 
 if __name__ == '__main__':
-	content = open(FILE,'r').read()
-	cipin(content,MODE,TOP)
+    content = open(FILE,'r').read()
+    cipin(content,MODE,TOP)

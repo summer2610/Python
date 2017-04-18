@@ -39,45 +39,45 @@ USER_AGENTS = [
 ]
 
 def get_headers():
-	return {
-	'User-Agent': random.choice(USER_AGENTS),
-	'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
-	'Accept-Language': 'en-US,en;q=0.5',
-	'Connection': 'keep-alive',
-	'Accept-Encoding': 'gzip, deflate'}
+    return {
+    'User-Agent': random.choice(USER_AGENTS),
+    'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+    'Accept-Language': 'en-US,en;q=0.5',
+    'Connection': 'keep-alive',
+    'Accept-Encoding': 'gzip, deflate'}
 
 #获取代理
 def choose_proxy():
-	proxypool = json.loads(requests.get('http://127.0.0.1:8000/?count=50').text)
-	proxy = random.choice(proxypool)
-	proxies = {'http':'http://%s:%s' %(proxy[0],proxy[1])}
-	return proxies
+    proxypool = json.loads(requests.get('http://127.0.0.1:8000/?count=50').text)
+    proxy = random.choice(proxypool)
+    proxies = {'http':'http://%s:%s' %(proxy[0],proxy[1])}
+    return proxies
 
 #定义获取下拉框函数
 def get_xlk(word):
-	xlk_url = 'http://suggestion.baidu.com/su?wd=%s&sugmode=3&json=1' %word
-	xlk_page = requests.get(xlk_url,headers=get_headers(),proxies=choose_proxy())
-	xlk_words = []
-	for xlk_word in json.loads(xlk_page.text.replace('window.baidu.sug(','').replace(');',''))['s']:
-		xlk_words.append(xlk_word)
-	return xlk_words
+    xlk_url = 'http://suggestion.baidu.com/su?wd=%s&sugmode=3&json=1' %word
+    xlk_page = requests.get(xlk_url,headers=get_headers(),proxies=choose_proxy())
+    xlk_words = []
+    for xlk_word in json.loads(xlk_page.text.replace('window.baidu.sug(','').replace(');',''))['s']:
+        xlk_words.append(xlk_word)
+    return xlk_words
 
 #定义获取相关推荐函数
 def get_xgtj(word):
-	xgtj_url = 'http://www.baidu.com/s?wd=%s' %word
-	xgtj_page = requests.get(xgtj_url,headers=get_headers(),proxies=choose_proxy())
-	time.sleep(5)
-	s = BeautifulSoup(xgtj_page.text,'lxml')
-	xgtj_words = [ x.getText() for x in s.find('div',id='rs').findAll('a')]
-	return xgtj_words
+    xgtj_url = 'http://www.baidu.com/s?wd=%s' %word
+    xgtj_page = requests.get(xgtj_url,headers=get_headers(),proxies=choose_proxy())
+    time.sleep(5)
+    s = BeautifulSoup(xgtj_page.text,'lxml')
+    xgtj_words = [ x.getText() for x in s.find('div',id='rs').findAll('a')]
+    return xgtj_words
 
 
 if __name__ == '__main__':
 
-	f = open('result.txt','w')
-	for query in open(sys.argv[1],'r'):
-		words = get_xlk(query.strip()) + get_xgtj(query.strip())
-		time.sleep(2)
-		for word in words:
-			print(word)
-			f.write('%s\n' %word)
+    f = open('result.txt','w')
+    for query in open(sys.argv[1],'r'):
+        words = get_xlk(query.strip()) + get_xgtj(query.strip())
+        time.sleep(2)
+        for word in words:
+            print(word)
+            f.write('%s\n' %word)

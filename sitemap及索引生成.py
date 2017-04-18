@@ -17,30 +17,30 @@ lastmod = datetime.date.today()
 
 
 def add_file(j,f1,host,path):
-	file_name = 'sitemap_%s.xml'%(j)
-	f1.write("\n<sitemap>\n<loc>%s%s%s</loc>\n<lastmod>%s</lastmod>\n<priority>0.8</priority>\n</sitemap>"%(host,path,file_name,lastmod))
-	f=open("%s%s"%(path,file_name),"a")
-	f.write('<?xml version="1.0" encoding="utf-8"?>\n<urlset>')
-	return f
-	
+    file_name = 'sitemap_%s.xml'%(j)
+    f1.write("\n<sitemap>\n<loc>%s%s%s</loc>\n<lastmod>%s</lastmod>\n<priority>0.8</priority>\n</sitemap>"%(host,path,file_name,lastmod))
+    f=open("%s%s"%(path,file_name),"a")
+    f.write('<?xml version="1.0" encoding="utf-8"?>\n<urlset>')
+    return f
+    
 
 #判断总的URL数
 c = 0
 for i in open('urls.txt'):
-	url = i.strip()
-	if len(url)==0:
-		pass
-	else:
-		c+=1
+    url = i.strip()
+    if len(url)==0:
+        pass
+    else:
+        c+=1
 print c
 #判断需要生成的sitemap个数
 file_num = c%50000
 if file_num==0:
-	file_num = c/50000
-	print '总共有%s条URL，生成%s个sitemap文件'%(c,file_num)
+    file_num = c/50000
+    print '总共有%s条URL，生成%s个sitemap文件'%(c,file_num)
 else:
-	file_num = (c/50000)+1
-	print '总共有%s条URL，生成%s个sitemap文件'%(c,file_num)
+    file_num = (c/50000)+1
+    print '总共有%s条URL，生成%s个sitemap文件'%(c,file_num)
 
 
 #自动按5W条URL生成sitemap，并自动命名为sitemap_1.xml
@@ -52,15 +52,15 @@ f1 = open('%s/sitemapindex.xml'%(path),'a')
 f1.write('<?xml version="1.0" encoding="utf-8"?>\n<sitemapindex>')
 f1.write("\n<sitemap>\n<loc>%s%s%s</loc>\n<lastmod>%s</lastmod>\n<priority>0.8</priority>\n</sitemap>"%(host,path,'sitemap_1.xml',lastmod))
 for url in open("urls.txt"):
-	url = url.strip()
-	i += 1
-	if i == 50000 or j == 50000:
-		f.write('\n</urlset>')
-		f.close()
-		i = 0
-		f = add_file(j,f1,host,path)
-		j += 1
-	f.write("\n<url>\n<loc>%s</loc>\n<lastmod>%s</lastmod>\n<priority>0.8</priority>\n</url>"%(url,lastmod))
+    url = url.strip()
+    i += 1
+    if i == 50000 or j == 50000:
+        f.write('\n</urlset>')
+        f.close()
+        i = 0
+        f = add_file(j,f1,host,path)
+        j += 1
+    f.write("\n<url>\n<loc>%s</loc>\n<lastmod>%s</lastmod>\n<priority>0.8</priority>\n</url>"%(url,lastmod))
 
 f.write('\n</urlset>')
 f1.write('\n</sitemapindex>')

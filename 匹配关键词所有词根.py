@@ -17,12 +17,12 @@ cigens = open(sys.argv[1],'r').readlines()
 rst = open('result.txt','w')
 
 for k in keywords:
-	k = k.strip()
-	for c in cigens:
-		c = c.strip()
-		c_in_k_list = []
-		if c in k:
-			c_in_k_list.append(c)
-	rst.write('%s %s\n' %(k,','.join(c_in_k_list)))
+    k = k.strip()
+    for c in cigens:
+        c = c.strip()
+        c_in_k_list = []
+        if c in k:
+            c_in_k_list.append(c)
+    rst.write('%s %s\n' %(k,','.join(c_in_k_list)))
 
 rst.close()
