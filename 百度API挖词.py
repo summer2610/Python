@@ -1,7 +1,7 @@
 # coding:utf-8
 from AuthHeader import *
 from JsonEnvelop import *
-import requests,json,csv,sys,os,time,codecs
+import requests,json,csv,sys,os,time,codecs,CONFIG
 
 def convert_to_builtin_type(obj):
     d = {}
@@ -15,7 +15,7 @@ starttime = time.strftime('%Y/%m/%d %H:%M:%S')
 count = 0
 
 #3种请求，header和headers是一样的
-header = AuthHeader(username='',password='',token='')    
+header = AuthHeader(username=CONFIG.username,password=CONFIG.password,token=CONFIG.token)    
 headers = {'content-type': 'application/json;charset=utf-8'}
 
 #三个接口的地址
