@@ -10,7 +10,7 @@
 import socket,argparse,re
 from bs4 import BeautifulSoup
 
-def check(ip):
+def if_bd_ip(ip):
     try:
         result = socket.gethostbyaddr(ip)
         if 'crawl.baidu.com' in result[0]:
