@@ -1,7 +1,10 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+
 import random
 top = 100
 bottom = 1
-ans = random.randint(top,bottom)
+ans = random.randint(bottom,top)
 times = 5
 print('猜数字游戏')
 

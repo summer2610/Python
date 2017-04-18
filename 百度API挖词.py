@@ -15,7 +15,7 @@ starttime = time.strftime('%Y/%m/%d %H:%M:%S')
 count = 0
 
 #3种请求，header和headers是一样的
-header = AuthHeader(username='',password='',token='')	
+header = AuthHeader(username='彬讯科技to8to',password='tO8to2014!@#$',token='d940610078fd60849a749b9e5a2fe09b')	
 headers = {'content-type': 'application/json;charset=utf-8'}
 
 #三个接口的地址
@@ -25,7 +25,7 @@ url3 = 'https://api.baidu.com/json/sms/v4/KRService/getFilePath'
 
 
 #逐行读取文件，每100个生成一个列表作为请求数据
-text = open('E:/keywords.txt','r',encoding='utf-8').readlines()
+text = open('keywords.txt','r',encoding='utf-8').readlines()
 while text:
     lines = text[:100]
     text = text[100:]
@@ -117,7 +117,7 @@ while text:
 
     #下载文件
     r = requests.get(filePath)
-    with open('E:/挖词/%s' %filename,"wb") as file:
+    with open('%s' %filename,"wb") as file:
         file.write(r.content)
     print('文件%s下载完成' %filename)
     
