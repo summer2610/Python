@@ -6,11 +6,11 @@
 import requests,sys,time
 
 def get_by_url(bdurl):
-	return requests.head(bdurl,allow_redirects=False).headers['Location']
+    return requests.head(bdurl,allow_redirects=False).headers['Location']
 
 if __name__ == '__main__':
-	for bdurl in open(sys.argv[1],'r'):
-		url = get_by_url(bdurl.strip())
-		print(url)
-		with open('landpageurl.txt','a+') as f:
-			f.write('%s\t%s\n' %(bdurl.strip(),url))
+    for bdurl in open(sys.argv[1],'r'):
+        url = get_by_url(bdurl.strip())
+        print(url)
+        with open('landpageurl.txt','a+') as f:
+            f.write('%s\t%s\n' %(bdurl.strip(),url))
