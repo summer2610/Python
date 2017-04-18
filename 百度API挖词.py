@@ -15,7 +15,7 @@ starttime = time.strftime('%Y/%m/%d %H:%M:%S')
 count = 0
 
 #3种请求，header和headers是一样的
-header = AuthHeader(username='彬讯科技to8to',password='tO8to2014!@#$',token='d940610078fd60849a749b9e5a2fe09b')    
+header = AuthHeader(username='',password='',token='')    
 headers = {'content-type': 'application/json;charset=utf-8'}
 
 #三个接口的地址
