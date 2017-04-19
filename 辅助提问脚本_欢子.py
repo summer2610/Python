@@ -1,3 +1,10 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+
+'''
+辅助提问脚本
+采集关键词百度下拉框以及问答搜索第一条结果
+'''
 
 import requests,re,time,threading
 from bs4 import BeautifulSoup

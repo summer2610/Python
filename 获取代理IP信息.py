@@ -1,3 +1,6 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+
 '''
 将IP作为代理访问www.ip.cn，如果能访问且返回的不是本地IP，说明此代理IP可用
 '''
