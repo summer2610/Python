@@ -48,42 +48,48 @@ def run(keyword):
         article = arts(keyword,soup)
         question = ques(keyword,soup)
     except:
-        print('关键词：%s 出错'%keyword)
+        result.write('%s 出错\n'%keyword)
     else:
         lock.acquire()
-        try:
-            result.write('%s\t%s\t%s\n' %(keyword,channel,picture + article + question))
-        finally:
-            lock.release()
+        result.write('%s\t%s\t%s\n' %(keyword,channel,picture + article + question))
+        lock.release()
 
 #获取代理
 def chooseproxy():
     proxypool = json.loads(requests.get('http://127.0.0.1:8000/?count=50').text)
     proxy = random.choice(proxypool)
-    proxies = {'http':'http://%s:%s' %(proxy[0],proxy[1])}
-    return proxies
+    try:
+        requests.get('http://www.ip.cn',proxies=proxy)
+    except:
+        chooseproxy()
+    else:
+        proxies = {'http':'http://%s:%s' %(proxy[0],proxy[1])}
+        return proxies
 
 
-lock = threading.Lock()
-result = open('result.txt','w')
-result.write('关键词\t频道数\t完全包含内容数\n')
 
+if __name__ == "__main__":
 
-text = open(sys.argv[1],'r').readlines()
-while text:
-    lines = text[:os.cpu_count()]        #进程数量
-    text = text[os.cpu_count():]
-    threads = []
-    for keyword in lines:
-        keyword = keyword.strip()
-        t = threading.Thread(target=run,args=(keyword,))
-        threads.append(t)
-        t.start()
-
-
-    for t in threads:
-        t.join()
-
-    time.sleep(1)
-
-result.close()
+    lock = threading.Lock()
+    result = open('result.txt','a+')
+    result.write('关键词\t频道数\t完全包含内容数\n')
+    
+    
+    text = open(sys.argv[1],'r').readlines()[1030:]
+    while text:
+        lines = text[:os.cpu_count()]        #进程数量
+        text = text[os.cpu_count():]
+        threads = []
+        for keyword in lines:
+            keyword = keyword.strip()
+            t = threading.Thread(target=run,args=(keyword,))
+            threads.append(t)
+            t.start()
+    
+    
+        for t in threads:
+            t.join()
+    
+        time.sleep(1)
+    
+    result.close()
