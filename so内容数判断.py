@@ -3,7 +3,7 @@
 '''
 
 
-import requests,threading,time
+import requests,threading,time,os,sys,json,random
 from bs4 import BeautifulSoup
 
 def chnls(keyword,soup):
@@ -40,7 +40,7 @@ def ques(keyword,soup):
     return n
 
 def run(keyword):
-    r = requests.get('http://so.to8to.com/so.php?keyword=%s' %keyword)
+    r = requests.get('http://so.to8to.com/so.php?keyword=%s' %keyword,proxies=chooseproxy())
     soup = BeautifulSoup(r.text,'lxml')
     try:
         channel = chnls(keyword,soup)
@@ -56,14 +56,23 @@ def run(keyword):
         finally:
             lock.release()
 
+#获取代理
+def chooseproxy():
+    proxypool = json.loads(requests.get('http://127.0.0.1:8000/?count=50').text)
+    proxy = random.choice(proxypool)
+    proxies = {'http':'http://%s:%s' %(proxy[0],proxy[1])}
+    return proxies
+
+
 lock = threading.Lock()
 result = open('result.txt','w')
 result.write('关键词\t频道数\t完全包含内容数\n')
 
-text = open('keyword.txt','r').readlines()
+
+text = open(sys.argv[1],'r').readlines()
 while text:
-    lines = text[:3]        #进程数量
-    text = text[3:]
+    lines = text[:os.cpu_count()]        #进程数量
+    text = text[os.cpu_count():]
     threads = []
     for keyword in lines:
         keyword = keyword.strip()
@@ -78,4 +87,3 @@ while text:
     time.sleep(1)
 
 result.close()
-
