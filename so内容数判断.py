@@ -1,3 +1,6 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+
 '''
 以关键词为搜索词请求so.php，通过分析返回的html源码判断内容数量
 '''
