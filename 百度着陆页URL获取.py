@@ -1,7 +1,9 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-#获取百度搜索结果真实URL
+'''
+通过搜索结果地址获取着陆页真实URL
+'''
 
 import requests,sys,time
 
