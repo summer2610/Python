@@ -48,7 +48,7 @@ def run(keyword):
     try:
         proxies = chProxy()
         print('%s\t获取代理IP -- 完成' %os.getpid())
-        r = requests.get('http://so.to8to.com/so.php?keyword=%s' %keyword,proxies=proxies,timeout=30)
+        r = requests.get('http://so.to8to.com/so.php?keyword=%s' %keyword,proxies=proxies,timeout=10)
         print('%s\t请求so页面 -- 完成' %os.getpid())
         soup = BeautifulSoup(r.text,'lxml')
         print('%s\t获取源码 -- 完成' %os.getpid())
