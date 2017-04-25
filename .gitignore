@@ -103,4 +103,5 @@ ENV/
 ask_title.txt
 get-pip.py
 sitemap及索引生成.py
+result.txt
 CONFIG.py
