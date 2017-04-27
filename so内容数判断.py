@@ -71,6 +71,7 @@ def run(keyword,text,result):
         lock.release()
     finally:
         result.flush()
+        time.sleep(0.5)
 
 
 if __name__ == "__main__":
@@ -79,7 +80,7 @@ if __name__ == "__main__":
     result = open(sys.argv[2],'a+')
     
     
-    text = open(sys.argv[1],'r').readlines()[:10000]
+    text = open(sys.argv[1],'r').readlines()
     while text:
         lines = text[:os.cpu_count()]        #进程数量
         text = text[os.cpu_count():]
