@@ -12,16 +12,16 @@ def choose(num,list):
         newlist.append(random.choice(list))
     return newlist
 
-def getTitle(id):
+def ifOnline(title):
+    proxies=chProxy()
     try:
-        r = requests.get('http://www.to8to.com/ask/k%s.html' %id,headers=makeHeaders(),proxies=chProxy(),timeout=5)
+        r = requests.get('http://www.to8to.com/ask/search.php?keyword=' %title,headers=makeHeaders(),proxies=proxies,timeout=5)
         s = BeautifulSoup(r.text,'lxml')
-        title = s.find('title').getText().split('_')[0]
+        oltitle = s.findAll('a','ect')[0].em.getText()
     except:
-        title = ''
-        return title
+        return ''
     else:
-        return title
+        return oltitle
 
 
 if __name__ == '__main__': 
@@ -35,11 +35,8 @@ if __name__ == '__main__':
     print('开始判断')
     for i in random_data:
         askid,*title = i.strip().split(',')
-        title = ','.join(title)
-        online_title = getTitle(askid)
-        print('%s:%s' %(askid,online_title))
-        time.sleep(0.5)
-        if title == online_title:
+        title = ''.join(title)
+        if ifOnline(title) == title:
             count += 1
-    
+
     print('数据正确率 %s%%' %(count/1000*100))

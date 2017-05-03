@@ -5,7 +5,7 @@ def chProxy():
     proxy = random.choice(proxypool)
     proxies = {'http':'http://%s:%s' %(proxy[0],proxy[1])}
     try:
-        requests.get('http://www.ip.cn',proxies=proxies,timeout=5)
+        requests.get('http://httpbin.org/ip',proxies=proxies,timeout=5)
     except:
         chProxy()
     else:
