@@ -1,3 +1,6 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+
 '''
 基于结巴分词
 1.先进行搜索引擎分词，然后统计词频
@@ -7,8 +10,6 @@
 用法
 命令行运行：python3 [参数] 脚本文件 目标文件 
 '''
-
-
 
 import jieba.analyse
 import jieba,argparse

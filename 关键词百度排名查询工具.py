@@ -1,6 +1,16 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
+'''
+批量查询网站关键词百度排名以及着陆页的真实URL，如有多个排名可全部查出
+
+用法，命令行输入：
+python3 bdrank.py 关键词文件 生成的数据文件
+
+如我想查询土巴兔问答某批关键词百度排名
+python3 bdrank.py 问答关键词.txt 排名数据.txt
+'''
+
 import requests,sys,re,os
 from bs4 import BeautifulSoup
 from UA import makeHeaders
