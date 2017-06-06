@@ -1,6 +1,11 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
+'''
+通过URL批量查询状态码、title数据
+'''
+
+
 import requests,sys,os
 from proxypool import chProxy
 from multiprocessing import Process
