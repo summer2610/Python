@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-import requests,json
+import requests,json,time
 from bs4 import BeautifulSoup
 from UA import makeHeaders
 from proxypool import chProxy
@@ -9,16 +9,19 @@ from proxypool import chProxy
 def get_indexed(url):
     url = 'http://%s' %url if 'http' not in url else url
     search_url = 'http://www.baidu.com/s?wd=%s&tn=json' %url
-    r = reuqests.get(search_url,header=makeHeaders,proxies=chProxy())
-    js_text = js.load(r.text)
-    landurl = js_text['feed']['entry'][0]['url']
-    if url == landurl:
-        return 1
+    r = requests.get(search_url,headers=makeHeaders(),proxies=chProxy(),timeout=10)
+    js_text = json.loads(r.text)
+    if js_text['feed']['entry'][0] == {}:
+        return '未收录'
     else:
-        return 0
+        landurl = js_text['feed']['entry'][0]['url']
+        if url == landurl:
+            return '已收录'
+        else:
+            return '未收录'
 
-def get_ztm(url):
-    return requests.get(url).status_code
+def get_ztm(url,proxy):
+    return requests.head(url,proxies=proxy).status_code
 
 def to8to_rank_filter(tag):
     if tag.name != 'div' or not tag.has_attr('class'):
@@ -41,7 +44,7 @@ def get_rank_data(tag,keyword):
     return [keyword,rank,landurl]
 
 def get_ranks(keyword,url):
-    r = requests.get('http://www.baidu.com/s?wd=%s' %keyword,header=makeHeaders(),proxies=chProxy())
+    r = requests.get('http://www.baidu.com/s?wd=%s' %keyword,headers=makeHeaders(),proxies=chProxy())
     s = BeautifulSoup(r.text,'lxml')
     to8to_ranks = s.findAll(to8to_rank_filter)
     rank_datas = []
@@ -54,11 +57,34 @@ def get_ranks(keyword,url):
         
 
 
-def run(keyword=None,url=None,mode=None):
+def run(keyword=None,url=None,mode=None,proxy=None):
     if mode == 'ztm':
-        return '%s\t%s' %(url,get_ztm(url))
+        return '%s\t%s' %(url,get_ztm(url,proxy))
     if mode == 'sl':
-        return '%s\t%s' %(url,get_indexed(url))
+        return '%s\t%s' %(url,get_indexed(url,proxy))
     elif mode == 'pm':
-        pass
+        rank_datas = get_ranks(keyword,url,proxy)
+        for i in rank_datas:
+            print('%s\t%s\t%s' %(i[0],i[1],i[2]))
+
+
+if __name__ == '__main__':
+    in_mode = sys.argv[2]
+   
+    for line in open(sys.argv[3],'r'):
+        in_keyword,in_url = line.strip().split(',')
+ 
+        #查状态码or收录
+        if in_mode in ['ztm','sl']:
+        run(url=in_url,mode='ztm') if in_mode == 'ztm' else run(url=in_url,mode='sl')
+        #查排名
+        elif in_mode == 'pm':
+        run(keyword=in_keyword,url=in_url,mode='pm')
+        
+        #查状态码、收录、排名
+        elif in_mode == 'all':
+        run(keyword=in_keyword,url=in_url,mode='all')
+
+
+        
         
