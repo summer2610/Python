@@ -76,14 +76,14 @@ if __name__ == '__main__':
  
         #查状态码or收录
         if in_mode in ['ztm','sl']:
-        run(url=in_url,mode='ztm') if in_mode == 'ztm' else run(url=in_url,mode='sl')
+            run(url=in_url,mode='ztm') if in_mode == 'ztm' else run(url=in_url,mode='sl')
         #查排名
         elif in_mode == 'pm':
-        run(keyword=in_keyword,url=in_url,mode='pm')
+            run(keyword=in_keyword,url=in_url,mode='pm')
         
         #查状态码、收录、排名
         elif in_mode == 'all':
-        run(keyword=in_keyword,url=in_url,mode='all')
+            run(keyword=in_keyword,url=in_url,mode='all')
 
 
         
