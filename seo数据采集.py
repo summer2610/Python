@@ -1,6 +1,22 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
+'''
+seo数据采集脚本
+
+用法
+    python3 seo数据采集.py [参数] [输出文件]
+
+参数
+    ztm，查询状态码
+    sl，查询收录
+    pm，查询排名
+
+示例
+    python3 seo数据采集.py ztm 查询结果.txt
+'''
+
+
 import requests,json,time
 from bs4 import BeautifulSoup
 from UA import makeHeaders
@@ -69,9 +85,9 @@ def run(keyword=None,url=None,mode=None,proxy=None):
 
 
 if __name__ == '__main__':
-    in_mode = sys.argv[2]
+    in_mode = sys.argv[1]
    
-    for line in open(sys.argv[3],'r'):
+    for line in open(sys.argv[2],'r'):
         in_keyword,in_url = line.strip().split(',')
  
         #查状态码or收录

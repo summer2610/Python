@@ -42,10 +42,11 @@ def run(url,filename,lock):
     try:
         r = requests.get(url,headers=makeHeaders(),proxies=chProxy(),timeout=10)
     except Exception as e:
-        lock.acquire()
-        with open('failed.log','a+') as log:
-            log.write('%s\t%s\n' %(keyword,e))
-        lock.release()
+        # lock.acquire()
+        # with open('failed.log','a+') as log:
+        #     log.write('%s\t%s\n' %(keyword,e))
+        # lock.release()
+        pass
     else:
         s = BeautifulSoup(r.text,'lxml')
         to8toRanks = s.findAll(to8to_rank_filter)

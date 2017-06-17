@@ -14,5 +14,5 @@ if __name__ == '__main__':
     for bdurl in open(sys.argv[1],'r'):
         url = get_by_url(bdurl.strip())
         print(url)
-        with open('landpageurl.txt','a+') as f:
+        with open(sys.argv[2],'a+') as f:
             f.write('%s\t%s\n' %(bdurl.strip(),url))
