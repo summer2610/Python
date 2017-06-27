@@ -15,8 +15,8 @@ if __name__ == '__main__':
         try:
             url = get_by_url(bdurl.strip())
         except:
-            with open('f.txt','a+') as ff:
-                ff.write('%s\n' %bdurl)
+            with open('失败.txt','a+') as ff:
+                ff.write('%s' %bdurl)
         else:
             print(url)
             with open(sys.argv[2],'a+') as f:

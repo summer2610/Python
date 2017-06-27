@@ -1,6 +1,17 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
+'''
+提取指定URL的日志记录脚本
+
+用法
+python3 bd抓取记录提取.py 日志压缩文件 URL文件
+
+例
+python3 bd抓取记录提取.py baidusearch-2017-06-25.tar.gz 0625问答新增问题.txt
+'''
+
+
 import gzip,tarfile,os,sys,shutil
 
 def un_tar(file_name):
