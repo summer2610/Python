@@ -15,46 +15,46 @@
 '''
 
 #多进程版
-#from multiprocessing import Process
-#import os,sys
-#
-#def getBJS(word,titles):
-#    rst.write('%s\t%s\n' %(word,titles.count(word)))
-#    rst.flush()
-#
-#
-#if __name__ == '__main__':
-#
-#    all_titles = open('ask_title.txt','r').read()
-#    keywords = open('test.txt','r').readlines()
-#    rst = open('result.txt','w')
-#    
-#    while keywords:
-#        cpus = os.cpu_count()
-#        lines = keywords[:cpus]
-#        keywords = keywords[cpus:]
-#        ps = []
-#        
-#        for k in lines:
-#            k = k.strip()
-#            p = Process(target=getBJS,args=(k,all_titles))
-#            ps.append(p)
-#            p.start()
-#            
-#        for p in ps:
-#            p.join()
-#
-#    rst.close()
+from multiprocessing import Process
+import os,sys
+
+def getBJS(word,titles):
+    rst.write('%s\t%s\n' %(word,titles.count(word)))
+    rst.flush()
+
+
+if __name__ == '__main__':
+
+    all_titles = open(sys.argv[1],'r').read()
+    keywords = open(sys.argv[2],'r').readlines()
+    rst = open('result.txt','w')
+    
+    while keywords:
+        cpus = os.cpu_count()
+        lines = keywords[:cpus]
+        keywords = keywords[cpus:]
+        ps = []
+        
+        for k in lines:
+            k = k.strip().split(',')[0]
+            p = Process(target=getBJS,args=(k,all_titles))
+            ps.append(p)
+            p.start()
+            
+        for p in ps:
+            p.join()
+
+    rst.close()
 
 #单进程版    
-file = open(sys.argv[1],'r',encoding="UTF-8")
-text = file.read()
-w = open('布局数.txt','w',encoding="UTF-8")
-
-for k in open(sys.argv[2],'r',encoding="UTF-8"):
-    k = k.strip()
-    count = 0
-    count = count + text.count(k)
-    outputstr = '%s,%s\n' %(count,k)
-    w.write(outputstr)
-w.close()
+#file = open(sys.argv[1],'r',encoding="UTF-8")
+#text = file.read()
+#w = open('布局数.txt','w',encoding="UTF-8")
+#
+#for k in open(sys.argv[2],'r',encoding="UTF-8"):
+#    k = k.strip()
+#    count = 0
+#    count = count + text.count(k)
+#    outputstr = '%s,%s\n' %(count,k)
+#    w.write(outputstr)
+#w.close()
