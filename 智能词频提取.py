@@ -8,7 +8,7 @@
 3.匹配重点关键词词频，排序后输出
 
 用法
-    python3 [参数] 脚本文件 目标文件 
+    python3 脚本文件 [参数] 目标文件 
 
 参数
     -k,--topK
@@ -17,7 +17,7 @@
         值:s、c，s代表搜索引擎分词，c代表普通分词
 
 示例        
-    python3 -k 20 -m s 智能词频提取.py 提取结果.txt
+    python3 智能词频提取.py -k 20 -m s 提取结果.txt
 '''
 
 import jieba.analyse

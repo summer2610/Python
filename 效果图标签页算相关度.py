@@ -1,4 +1,4 @@
-import re,requests
+import re,requests,sys
 from bs4 import BeautifulSoup
 
 def getxgd(keyword,url):
@@ -17,17 +17,18 @@ def getxgd(keyword,url):
     else:
         return {'keyword':keyword,'url':url,'相关度':str(count/pics*100)[:2] + '%'}
 
-#filepath = input('输入url文件路径，如E:\\urls.txt\n')
-rst = open('相关度.txt','w')
-for u in open('E:\\Studio\\Python\\urls.txt','r',encoding='utf-8'):
-    u = u.split(',')
-    try:
-        rdict = getxgd(u[0],u[1].strip())
-    except:
-        continue
-    else:
-        keyword = rdict['keyword']
-        url = rdict['url']
-        xgd = rdict['相关度']
-        rst.write('%s\t%s\t%s\n' %(keyword,url,xgd))
-rst.close()
+if __name__ == "__main__":
+    #filepath = input('输入url文件路径，如E:\\urls.txt\n')
+    rst = open('相关度.txt','w')
+    for u in open(sys.argv[1],'r',encoding='utf-8'):
+        u = u.split(',')
+        try:
+            rdict = getxgd(u[0],u[1].strip())
+        except:
+            continue
+        else:
+            keyword = rdict['keyword']
+            url = rdict['url']
+            xgd = rdict['相关度']
+            rst.write('%s\t%s\t%s\n' %(keyword,url,xgd))
+    rst.close()
