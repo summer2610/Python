@@ -8,8 +8,7 @@
 import requests,time,os,sys,json,random
 from multiprocessing import Process,Lock
 from bs4 import BeautifulSoup
-from proxypool import chProxy
-from UA import makeHeaders
+from CONFIG import getProxy,makeHeaders
 
 def chnls(keyword,soup):
     return len(soup.findAll('h3','Seotitle-h3 clear'))
@@ -48,7 +47,7 @@ def run(keyword,text,result):
     try:
         headers = makeHeaders()
         #print('%s\t生成请求头 -- 完成' %os.getpid())
-        proxies = chProxy()
+        proxies = getProxy()
         #print('%s\t获取代理IP -- 完成' %os.getpid())
         r = requests.get('http://so.to8to.com/so.php?keyword=%s' %keyword,headers=headers,proxies=proxies,timeout=10)
         #print('%s\t请求so页面 -- 完成' %os.getpid())

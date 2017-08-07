@@ -12,8 +12,7 @@
 
 from bs4 import BeautifulSoup
 import requests,time,random,sys
-from UA import makeHeaders
-from proxypool import chProxy
+from CONFIG import makeHeaders,getProxy
 
 def choose(num,list):
     newlist = []
@@ -22,7 +21,7 @@ def choose(num,list):
     return newlist
 
 def ifOnline(title):
-    proxies=chProxy()
+    proxies=getProxy()
     try:
         r = requests.get('http://www.to8to.com/ask/search.php?keyword=%s' %title,timeout=5)#,headers=makeHeaders(),proxies=proxies)
         s = BeautifulSoup(r.text,'lxml')

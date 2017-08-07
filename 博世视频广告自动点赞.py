@@ -2,8 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import requests,time,random
-from UA import *
-from proxypool import chProxy
+from CONFIG import makeHeaders,getProxy
 
 url = 'https://ssl-api.720yun.com/api/pano/56fjk5mvzy4/like'
 
@@ -75,7 +74,7 @@ def make_headers():
         'User-Agent':random.choice(mobile_UAs)}
 
 def do_like(s):
-    proxy = chProxy()
+    proxy = getProxy()
     requests.options(url,headers=opt_headers,proxies=proxy)
     time.sleep(0.3)
     requests.post(url,headers=make_headers(),proxies=proxy)

@@ -7,7 +7,7 @@
 
 
 import requests,sys,os
-from proxypool import chProxy
+from CONFIG import getProxy
 from multiprocessing import Process
 from bs4 import BeautifulSoup
 
@@ -15,14 +15,14 @@ def manager(url,filename,mode):
     
     if mode == 'ztm':
         try:
-            r = requests.head(url,proxies=chProxy(),timeout=5)
+            r = requests.head(url,proxies=getProxy(),timeout=5)
         except:
             result = '失败'
         else:
             result = get_ztm(r)
     elif mode == 'title':
         try:
-            r = requests.get(url,proxies=chProxy(),timeout=5)
+            r = requests.get(url,proxies=getProxy(),timeout=5)
         except:
             resutl = '失败'
         else:
@@ -36,7 +36,7 @@ def manager(url,filename,mode):
 
 
     #try:
-    #    r = requests.get(url,proxies=chProxy(),timeout=5)
+    #    r = requests.get(url,proxies=getProxy(),timeout=5)
     #except:
     #    print('%s\t失败' %url)
     #else:

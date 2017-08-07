@@ -19,13 +19,12 @@ seo数据采集脚本
 
 import requests,json,time
 from bs4 import BeautifulSoup
-from UA import makeHeaders
-from proxypool import chProxy
+from CONFIG import makeHeaders,getProxy
 
 def get_indexed(url):
     url = 'http://%s' %url if 'http' not in url else url
     search_url = 'http://www.baidu.com/s?wd=%s&tn=json' %url
-    r = requests.get(search_url,headers=makeHeaders(),proxies=chProxy(),timeout=10)
+    r = requests.get(search_url,headers=makeHeaders(),proxies=getProxy(),timeout=10)
     js_text = json.loads(r.text)
     if js_text['feed']['entry'][0] == {}:
         return '未收录'
@@ -60,7 +59,8 @@ def get_rank_data(tag,keyword):
     return [keyword,rank,landurl]
 
 def get_ranks(keyword,url):
-    r = requests.get('http://www.baidu.com/s?wd=%s' %keyword,headers=makeHeaders(),proxies=chProxy())
+    r = requests.get('http://www.baidu.com/s?wd=%s' 
+        %keyword,headers=makeHeaders(),proxies=getProxy())
     s = BeautifulSoup(r.text,'lxml')
     to8to_ranks = s.findAll(to8to_rank_filter)
     rank_datas = []

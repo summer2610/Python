@@ -3,16 +3,16 @@
 
 import requests,json,random,sys,os,re
 from bs4 import BeautifulSoup
-from proxypool import chProxy
+from CONFIG import makeHeaders,getProxy
 from UA import makeHeaders
 
 def getCacheURL(keyword):
-    r = requests.get('http://www.baidu.com/s?wd=%s' %keyword,proxies=chProxy(),headers=makeHeaders())
+    r = requests.get('http://www.baidu.com/s?wd=%s' %keyword,proxies=getProxy(),headers=makeHeaders())
     s = BeautifulSoup(r.text,'html.parser')
     return s.find('a',href=re.compile('http://cache.baiducontent.com.*'))['href']
 
 def getAnsNum(cacheURL):
-    r = requests.get(cacheURL,proxies=chProxy(),headers=makeHeaders())
+    r = requests.get(cacheURL,proxies=getProxy(),headers=makeHeaders())
     s = BeautifulSoup(r.text,'html.parser')
     try:
         AnsNum = s.findAll('div','title title2')[0].span.getText()
