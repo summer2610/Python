@@ -64,3 +64,4 @@ if __name__ == '__main__':
     for ip in ips:
         if not verify_ip(ip):
             fake_ips.append(ip)
+    print(fake_ips)

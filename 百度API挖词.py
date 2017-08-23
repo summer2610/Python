@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-import requests,json,csv,sys,os,time,codecs,CONFIG
+import requests,json,csv,sys,os,time,codecs
 
 def convert_to_builtin_type(obj):
     d = {}
@@ -9,7 +9,7 @@ def convert_to_builtin_type(obj):
     return d
 
 class AuthHeader():
-    
+
     def __init__(self, username=None,password=None,token=None,target=None,accessToken=None): 
         self.username=username
         self.password=password
@@ -17,8 +17,8 @@ class AuthHeader():
         self.target=target
         self.accessToken=accessToken
         self.action='API-SDK'
-        
-            
+
+
     def setUsername(self,username):
         self.username=username
     def setPassword(self,password):
@@ -33,8 +33,8 @@ class AuthHeader():
 class JsonEnvelop():
     header=None
     body=None
-    
-    def __init__(self,aheader=None,abody=None): 
+
+    def __init__(self,aheader=None,abody=None):
         self.header=aheader
         self.body=abody
     def setHeader(self,header):
@@ -42,14 +42,14 @@ class JsonEnvelop():
     def setBody(self,body):
         self.body=body
 
-failwords = open('E:/未采集关键词.txt','w')
+failwords = open('未采集关键词.txt','w')
 
 #记录开始时间，count作用是计数同时作为文件名增量
 starttime = time.strftime('%Y/%m/%d %H:%M:%S')
 count = 0
 
 #3种请求，header和headers是一样的
-header = AuthHeader(username=CONFIG.username,password=CONFIG.password,token=CONFIG.token)    
+header = AuthHeader(username='',password='',token='')
 headers = {'content-type': 'application/json;charset=utf-8'}
 
 #三个接口的地址
@@ -154,7 +154,8 @@ while text:
     with open('%s' %filename,"wb") as file:
         file.write(r.content)
     print('文件%s下载完成' %filename)
-    
+
+
 #记录结束时间
 endtime = time.strftime('%Y/%m/%d %H:%M:%S')
 print('耗时：%s  -  %s' %(starttime,endtime))

@@ -81,7 +81,7 @@ if __name__ == "__main__":
         for searchWord in team:
             url = 'http://www.baidu.com/s?wd=%s&rn=50' %searchWord.strip()
             #url = 'http://m.baidu.com/s?wd=%s' %searchWord.strip()
-            p = Process(target=run,args=(url,sys.argv[2],lock))
+            p = Process(target=run,args=(url,sys.argv[2],lock,'PC'))
             ps.append(p)
             p.start()
 

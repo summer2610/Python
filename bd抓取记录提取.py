@@ -22,13 +22,20 @@ def un_tar(file_name):
         tar.extract(name,file_name+ "_files/")
     tar.close()
 
-un_tar(sys.argv[1])
-log_dir = sys.argv[1] + "_files"
-log_file = sys.argv[1] + "_files/to8to_baidu.log"
+if '.tar' in sys.argv[1]:
+    un_tar(sys.argv[1])
+    log_dir = sys.argv[1] + "_files"
+    log_file = sys.argv[1] + "_files/to8to_baidu.log"
+elif '.log' in sys.argv[1]:
+    log_dir = '.'
+    log_file = sys.argv[1]
+else:
+    print('传入文件格式错误')
+    exit()
 
 site_log = {}
 
-#将日志记录构建为字典，key为抓取URL，值为状态码
+#将日志记录构建为字典，key为抓取URL，值为另一个字典，内容分别是
 for log_line in open(log_file,'r').readlines():
     line = log_line.split(' ')
     site_log[line[0]+line[7]] = line[9]
