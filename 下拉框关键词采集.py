@@ -56,7 +56,11 @@ if __name__ == '__main__':
 
     for seed_word in open(sys.argv[1],'r').readlines():
         seed_word = seed_word.strip()
-        for line in get_sugs(seed_word):
-            with open('下拉框关键词.txt','a+') as f:
-                f.write('%s\t%s\n' %(seed_word,line))
-        #time.sleep(0.5)
+    
+        #对种子词进行拓展，结尾加字母获得更多推荐词
+        seed_word_expand = [seed_word] + [ seed_word + x for x in 'abcdefghijklmnopqrstuvwxyz' ]
+        for seed in seed_word_expand:
+            for line in get_sugs(seed):
+                with open('下拉框关键词.txt','a+') as f:
+                    f.write('%s\t%s\n' %(seed_word,line))
+            #time.sleep(0.5)
