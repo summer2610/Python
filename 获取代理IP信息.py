@@ -2,28 +2,44 @@
 # -*- coding: utf-8 -*-
 
 '''
-将IP作为代理访问www.ip.cn，如果能访问且返回的不是本地IP，说明此代理IP可用
+将IP作为代理访问www.baidu.cn，如果返回状态码为200则代理IP有效
 '''
 
 import requests,sys
-from bs4 import BeautifulSoup
+from multiprocessing import Process,Lock
 
 def testProxies(ip):
     proxies = {'http':ip}
     try:
-        r = requests.get('http://www.ip.cn',proxies=proxies,timeout=4)
+        r = requests.head('http://www.ip.cn',proxies=proxies,timeout=10)
     except:
         print('%s\t不可用' %proxies['http'])
     else:
-        try:
-            rsoup = BeautifulSoup(r.text,'html.parser')
-            info=rsoup.findAll('code')[0].get_text()
-            location=rsoup.findAll('code')[1].get_text()
-        except:
-            print('%s get IP info error,%s' %(ip,r.status_code))
+        if r.status_code == 200:
+            print('%s\t可用' %proxies['http'])
+            lock.acquire()
+            with open('代理IP验证结果.txt','a+') as f:
+                f.write('%s\n' %ip)
+            lock.release()
         else:
-            print('%s\t%s' %(info,location))
+            print('%s\t不可用' %proxies['http'])
 
 
 if __name__=="__main__":
-    testProxies(sys.argv[1])
+    
+    lock = Lock()
+    ips = open(sys.argv[1],'r').readlines()
+    
+    while ips:
+    
+        t = ips[:4]
+        ips = ips[4:]
+        ps = []
+        
+        for ip in t:
+            p = Process(target=testProxies,args=(ip.strip(),))
+            ps.append(p)
+            p.start()
+            
+        for p in ps:
+            p.join()

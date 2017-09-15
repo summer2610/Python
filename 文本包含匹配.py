@@ -5,9 +5,8 @@
 通用的文本匹配脚本
 '''
 
-
-
 #import argparse
+import sys
 
 def match(map_dict,text,keyword_column,separator,mode):
     '''
@@ -57,4 +56,18 @@ def match_mode(a,b,mode):
 
 
 if __name__ == '__main__': 
-    pass
+    
+    text_file = sys.argv[1]
+    map_file = sys.argv[2]
+    
+    map_dict = {}
+    for i in open(map_file,'r').readlines():
+        i = i.strip().split(',')
+        map_dict[i[0]] = i[1]
+
+    data = match(map_dict,open(text_file,'r').readlines(),1,',',1)
+    with open('关键词阶段匹配结果.txt','a+') as f:
+        for i in data:
+            f.write('%s\n' %i)
+    
+    print('关键词阶段匹配结果 输出完毕')
