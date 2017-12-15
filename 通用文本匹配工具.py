@@ -3,6 +3,9 @@
 
 '''
 通用的文本匹配脚本
+
+传入需匹配的文本及配置项（代码第66行，分隔符，匹配因子所在列）
+传入映射关系及配置项（代码第69行，分隔符，匹配模式）
 '''
 
 #import argparse
@@ -23,22 +26,32 @@ def match(map_dict,text,keyword_column,separator,mode):
     for i in text:
         i = i.strip().split(separator)
         keyword = i[keyword_column-1]
+        matched_flag = 0
         for key in list(map_dict.keys()):
             if match_mode(key,keyword,mode):
                 matched_list.append('%s%s%s'%(map_dict[key],separator,separator.join(i)))
+                print('%s%s%s'%(map_dict[key],separator,separator.join(i)))
+                matched_flag = 1
                 break
+            else:
+                matched_flag = 2
+        if matched_flag == 2:
+            matched_list.append('无匹配项%s%s'%(separator,separator.join(i)))
     return matched_list
 
 def match_mode(a,b,mode):
     '''
     文本匹配模式控制
     0：相等
-    1：包含，如'客厅' in '客厅装修'
+    1：完全匹配包含，如'客厅' in '客厅装修'
+    2：完全包含，如'客厅装修' in '装修客厅图片'
     '''
     if mode == 0:
         return a == b
     elif mode == 1:
         return a in b
+    elif mode == 2:
+        return set(a) - set(b) == set()
     else:
         return False
 
@@ -53,21 +66,20 @@ def match_mode(a,b,mode):
 #args = parser.parse_args()
 
 
-
-
 if __name__ == '__main__': 
     
     text_file = sys.argv[1]
     map_file = sys.argv[2]
     
+    #构建映射字典
     map_dict = {}
     for i in open(map_file,'r').readlines():
-        i = i.strip().split(',')
+        i = i.strip().split(' ')    #分隔符
         map_dict[i[0]] = i[1]
 
-    data = match(map_dict,open(text_file,'r').readlines(),1,',',1)
-    with open('关键词阶段匹配结果.txt','a+') as f:
+    data = match(map_dict,open(text_file,'r').readlines(),2,'\t',0)    #分隔符、匹配因子所在列、匹配模式
+    with open('文本匹配结果.txt','a+') as f:
         for i in data:
             f.write('%s\n' %i)
     
-    print('关键词阶段匹配结果 输出完毕')
+    print('匹配结果输出完毕')
