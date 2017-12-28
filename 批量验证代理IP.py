@@ -2,16 +2,17 @@
 # -*- coding: utf-8 -*-
 
 '''
-将IP作为代理访问www.baidu.cn，如果返回状态码为200则代理IP有效
+将IP作为代理访问www.baidu.com，如果返回状态码为200则代理IP有效
 '''
 
 import requests,sys
-from multiprocessing import Process,Lock
+import threading
+from CONFIG import makeHeaders
 
 def testProxies(ip):
     proxies = {'http':ip}
     try:
-        r = requests.head('http://www.ip.cn',proxies=proxies,timeout=10)
+        r = requests.head('http://www.baidu.com',proxies=proxies,timeout=10,headers=makeHeaders())
     except:
         print('%s\t不可用' %proxies['http'])
     else:
@@ -26,18 +27,19 @@ def testProxies(ip):
 
 
 if __name__=="__main__":
+
+    lock = threading.Lock()
     
-    lock = Lock()
     ips = open(sys.argv[1],'r').readlines()
     
     while ips:
     
-        t = ips[:4]
-        ips = ips[4:]
+        t = ips[:10]
+        ips = ips[10:]
         ps = []
         
         for ip in t:
-            p = Process(target=testProxies,args=(ip.strip(),))
+            p = threading.Thread(target=testProxies,args=(ip.strip(),))
             ps.append(p)
             p.start()
             
