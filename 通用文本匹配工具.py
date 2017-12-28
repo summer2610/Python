@@ -4,42 +4,17 @@
 '''
 通用的文本匹配脚本
 
-传入需匹配的文本及配置项（代码第66行，分隔符，匹配因子所在列）
-传入映射关系及配置项（代码第69行，分隔符，匹配模式）
+传入需匹配的文本及配置项（分隔符，匹配因子所在列）
+传入映射关系及配置项（分隔符，匹配模式）
+
+映射关系数量越大匹配速度越慢;匹配模式不为0时速度慢
 '''
 
 #import argparse
 import sys
+#from multiprocessing import Process,Lock
 
-def match(map_dict,text,keyword_column,separator,mode):
-    '''
-    map，表示映射关系的dict，key为词根，值为所属阶段，如 {'公积金':'买房'}
-    text，匹配内容的文本list，如
-        ['关键词,搜索量,跳出率',
-        '公积金怎么查,120,,0.1',
-        '公积金如何使用,300,0.5']
-    keyword_column，数值，整型，匹配文本中关键词所在的列,如1;
-    separator，分隔符字符串，如',';
-    mode，匹配模式
-    '''
-    matched_list = []
-    for i in text:
-        i = i.strip().split(separator)
-        keyword = i[keyword_column-1]
-        matched_flag = 0
-        for key in list(map_dict.keys()):
-            if match_mode(key,keyword,mode):
-                matched_list.append('%s%s%s'%(map_dict[key],separator,separator.join(i)))
-                print('%s%s%s'%(map_dict[key],separator,separator.join(i)))
-                matched_flag = 1
-                break
-            else:
-                matched_flag = 2
-        if matched_flag == 2:
-            matched_list.append('无匹配项%s%s'%(separator,separator.join(i)))
-    return matched_list
-
-def match_mode(a,b,mode):
+def mode_ctrl(a,b,mode):
     '''
     文本匹配模式控制
     0：相等
@@ -55,31 +30,78 @@ def match_mode(a,b,mode):
     else:
         return False
 
-
-#parser = argparse.ArgumentParser()
-
-#parser.add_argument('text_file')
-#parser.add_argument('map_file')
-#parser.add_argument('keyword_column',type=int)
-#parser.add_argument('separator')
-
-#args = parser.parse_args()
+def match(map_dict,text,keyword_column,separator,mode):
+    keyword = text.split(key_file_separate)[keyword_column-1]
+    if mode == 0:
+        try:
+            re = map_dict[keyword]
+        except:
+            re = 'null'
+            re_with_data = '%s%s%s\n'%(re,separator,text)
+            f.write(re_with_data)
+            print(re_with_data.strip())
+        else:
+            re_with_data = '%s%s%s\n'%(re,separator,text)
+            f.write(re_with_data)
+            print(re_with_data.strip())
+    else:
+        matched_flag = 0
+        for key in list(map_dict.keys()):
+            if mode_ctrl(key,keyword,mode):
+                re = map_dict[key]
+                re_with_data = '%s%s%s\n'%(re,separator,text)
+                print(re_with_data.strip())
+                f.write(re_with_data)
+                matched_flag = 1
+                break
+            else:
+                matched_flag = 2
+        if matched_flag == 2:
+            re = 'null'
+            re_with_data = '%s%s%s\n'%(re,separator,text)
+            f.write(re_with_data)
+            print(re_with_data.strip())
 
 
 if __name__ == '__main__': 
+
+    #配置项
+    map_separate = ','   #映射关系文件的分隔符
+    key_file_separate  = ',' #匹配文件的分隔符
+    key_column = 2  #匹配因子在文件中的列数
+    match_mode = 1  #匹配模式
+
+    #lock = Lock()
     
     text_file = sys.argv[1]
     map_file = sys.argv[2]
+    f = open('文本匹配结果.txt','w')
     
     #构建映射字典
     map_dict = {}
     for i in open(map_file,'r').readlines():
-        i = i.strip().split(' ')    #分隔符
+        i = i.strip().split(map_separate)
         map_dict[i[0]] = i[1]
 
-    data = match(map_dict,open(text_file,'r').readlines(),2,'\t',0)    #分隔符、匹配因子所在列、匹配模式
-    with open('文本匹配结果.txt','a+') as f:
-        for i in data:
-            f.write('%s\n' %i)
+    text = [ x.strip() for x in open(text_file,'r').readlines() ]
     
+    for i in text:
+        match(map_dict,i,key_column,key_file_separate,match_mode)
+    
+    #while text:
+    #    team = text[:3]
+    #    text = text[3:]
+    #
+    #    ps = []
+    #
+    #    for text in team:
+    #        p = Process(target=match,
+    #                    args=(map_dict,text,key_column,key_file_separate,match_mode))
+    #        ps.append(p)
+    #        p.start()
+    #
+    #    for p in ps:
+    #        p.join()
+
+    f.close()
     print('匹配结果输出完毕')
