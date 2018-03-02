@@ -100,8 +100,30 @@ ENV/
 /site
 
 # Other
-ask_title.txt
-get-pip.py
-sitemap及索引生成.py
-result.txt
 CONFIG.py
+img2ascii.py
+set_gov_asks.py
+sitemap及索引生成.py
+so内容数判断.py
+update_sm_xml.py
+url提取器.py
+xlsx2csv.py
+百度API挖词_重构.py
+博世视频广告自动点赞.py
+颠倒词整理.py
+辅助提问脚本.py
+关键词全部排名查询.py
+关键词问答布局数查询.py
+兼职提问辅助.py
+快照回答数采集.py
+搜房楼盘图片采集.py
+提取不重复需求词.py
+提取颠倒词.py
+天猫商品价格采集.py
+同义同形词.py
+文本相似度.py
+效果图标签页算相关度.py
+效果图标签页统计图片相关度.py
+ask_cate.py
+cmd_trans.py
+
