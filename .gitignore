@@ -1,6 +1,5 @@
 # Byte-compiled / optimized / DLL files
 __pycache__/
-书籍教程/
 cmd_trans
 *.py[cod]
 *$py.class
@@ -126,4 +125,5 @@ xlsx2csv.py
 效果图标签页统计图片相关度.py
 ask_cate.py
 cmd_trans.py
-
+pattern_kv.json
+get_aizhan_citiaos.py
