@@ -1,4 +1,3 @@
-# Practices
 学习 Python 中，此为平时写的琐碎代码
 
 
